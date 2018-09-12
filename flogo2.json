@@ -279,7 +279,7 @@
                   },
                   {
                     "type": "literal",
-                    "value": "https://my.api.mockaroo.com/stock1/msft",
+                    "value": "https://my.api.mockaroo.com/stock2",
                     "mapTo": "uri"
                   },
                   {
@@ -309,11 +309,7 @@
                   {
                     "mapTo": "message",
                     "type": "object",
-                    "value": {
-                      "title": "{{$activity[rest_3].result.items[0].volumeInfo.title}}",
-                      "publishedDate": "{{$activity[rest_3].result.items[0].volumeInfo.publishedDate}}",
-                      "description": "{{$activity[rest_3].result.items[0].volumeInfo.description}}"
-                    }
+                    "value": "{{$activity[rest_5].result}}"
                   }
                 ]
               }
