@@ -193,7 +193,7 @@
                 ],
                 "output": [
                   {
-                    "type": "message",
+                    "type": "object",
                     "value": "{{$activity[rest_3].result}}"
                   }
                 ]
