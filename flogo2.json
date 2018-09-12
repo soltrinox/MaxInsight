@@ -77,7 +77,7 @@
           },
           "settings": {
             "method": "GET",
-            "path": "/sales/:repnum"
+            "path": "/repnum/:repnum"
           }
         }
       ]
