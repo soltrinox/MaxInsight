@@ -186,7 +186,7 @@
                     "mapTo": "message",
                     "type": "object",
                     "value": {
-                      "title": "{{$activity[rest_3].result"
+                      "title": "{{$activity[rest_3].result}}"
                     }
                   }
                 ]
