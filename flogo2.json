@@ -316,14 +316,6 @@
         ],
         "links": [
           {
-            "from": "log_2",
-            "to": "rest_3"
-          },
-          {
-            "from": "rest_3",
-            "to": "actreturn_4"
-          },
-          {
             "from": "log_5",
             "to": "rest_5"
           },
