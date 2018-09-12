@@ -194,8 +194,7 @@
                 "output": [
                   {
                     "type": "message",
-                    "value": "{{$activity[rest_3].result}}",
-
+                    "value": "{{$activity[rest_3].result}}"
                   }
                 ]
               }
