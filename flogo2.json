@@ -1,5 +1,5 @@
 {
-  "name": "myApp",
+  "name": "MaxInsight",
   "type": "flogo:app",
   "version": "0.0.1",
   "appModel": "1.0.0",
@@ -46,7 +46,7 @@
             "path": "/sales/:symbol"
           }
         },
-        // +++++++++++++++++++++++++++++++++++++++++++++++++++
+
         {
           "action": {
             "ref": "github.com/TIBCOSoftware/flogo-contrib/action/flow",
@@ -83,7 +83,7 @@
       ]
     }
   ],
-  // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
   "resources": [
     {
       "id": "flow:get_sales",
@@ -208,7 +208,7 @@
         ]
       }
     },
-    // =================================================
+
     {
       "id": "flow:get_rep",
       "data": {
