@@ -58,7 +58,7 @@
                 {
                   "mapTo": "repnum",
                   "type": "expression",
-                  "value": "string.concat(\"symbol:\", $.pathParams.repnum)"
+                  "value": "string.concat(\"repnum:\", $.pathParams.repnum)"
                 }
               ],
               "output": [
@@ -165,6 +165,38 @@
                     },
                     "mapTo": "queryParams"
                   }
+                ],"output":[
+                  {
+                    "name": "result",
+                    "type": "any"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "jsontodata_3",
+            "name": "JSON to Data",
+            "description": "Converts JSON string into a data object",
+            "activity": {
+              "ref": "github.com/jvanderl/flogo-components/activity/jsontodata",
+              "input": {
+                "input": ""
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "any",
+                    "value": "{{$activity[rest_3].result}}",
+                    "mapTo": "input"
+                  }
+                ],
+                "output": [
+                  {
+                    "type": "any",
+                    "value": "{{$activity[rest_3].result}}",
+                    "mapTo": "input"
+                  }
                 ]
               }
             }
@@ -186,7 +218,7 @@
                     "mapTo": "message",
                     "type": "object",
                     "value": {
-                      "title": "{{$activity[rest_3].result}}"
+                      "result": "{{$activity[rest_3].result}}"
                     }
                   }
                 ]
@@ -201,6 +233,10 @@
           },
           {
             "from": "rest_3",
+            "to": "jsontodata_3"
+          },
+          {
+            "from": "jsontodata_3",
             "to": "actreturn_4"
           }
         ]
@@ -307,7 +343,7 @@
                   {
                     "mapTo": "message",
                     "type": "object",
-                    "value": "{{$activity[rest_5].result}}"
+                    "result": "{{$activity[rest_5].result}}"
                   }
                 ]
               }
