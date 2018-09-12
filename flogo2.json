@@ -1,0 +1,344 @@
+{
+  "name": "myApp",
+  "type": "flogo:app",
+  "version": "0.0.1",
+  "appModel": "1.0.0",
+  "triggers": [
+    {
+      "id": "receive_http_message",
+      "ref": "github.com/TIBCOSoftware/flogo-contrib/trigger/rest",
+      "name": "Receive HTTP Message",
+      "description": "Simple REST Trigger",
+      "settings": {
+        "port": 9999
+      },
+      "handlers": [
+        {
+          "action": {
+            "ref": "github.com/TIBCOSoftware/flogo-contrib/action/flow",
+            "data": {
+              "flowURI": "res://flow:get_sales"
+            },
+            "mappings": {
+              "input": [
+                {
+                  "mapTo": "symbol",
+                  "type": "expression",
+                  "value": "string.concat(\"symbol:\", $.pathParams.symbol)"
+                }
+              ],
+              "output": [
+                {
+                  "mapTo": "code",
+                  "type": "assign",
+                  "value": "$.code"
+                },
+                {
+                  "mapTo": "data",
+                  "type": "assign",
+                  "value": "$.message"
+                }
+              ]
+            }
+          },
+          "settings": {
+            "method": "GET",
+            "path": "/sales/:symbol"
+          }
+        },
+        // +++++++++++++++++++++++++++++++++++++++++++++++++++
+        {
+          "action": {
+            "ref": "github.com/TIBCOSoftware/flogo-contrib/action/flow",
+            "data": {
+              "flowURI": "res://flow:get_rep"
+            },
+            "mappings": {
+              "input": [
+                {
+                  "mapTo": "repnum",
+                  "type": "expression",
+                  "value": "string.concat(\"symbol:\", $.pathParams.repnum)"
+                }
+              ],
+              "output": [
+                {
+                  "mapTo": "code",
+                  "type": "assign",
+                  "value": "$.code"
+                },
+                {
+                  "mapTo": "data",
+                  "type": "assign",
+                  "value": "$.message"
+                }
+              ]
+            }
+          },
+          "settings": {
+            "method": "GET",
+            "path": "/sales/:repnum"
+          }
+        }
+      ]
+    }
+  ],
+  // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  "resources": [
+    {
+      "id": "flow:get_sales",
+      "data": {
+        "name": "Getsales",
+        "metadata": {
+          "input": [
+            {
+              "name": "symbol",
+              "type": "string"
+            }
+          ],
+          "output": [
+            {
+              "name": "code",
+              "type": "integer"
+            },
+            {
+              "name": "message",
+              "type": "any"
+            }
+          ]
+        },
+        "tasks": [
+          {
+            "id": "log_2",
+            "name": "Log Message",
+            "description": "Simple Log Activity",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/log",
+              "input": {
+                "message": "",
+                "flowInfo": "false",
+                "addToFlow": "false"
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "expression",
+                    "value": "string.concat(\"Getting sales data for \", $flow.symbol)",
+                    "mapTo": "message"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "rest_3",
+            "name": "Invoke REST Service",
+            "description": "Simple REST Activity",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/rest",
+              "input": {
+                "method": "",
+                "uri": "",
+                "proxy": "",
+                "pathParams": null,
+                "queryParams": null,
+                "header": null,
+                "skipSsl": "false",
+                "content": null
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "literal",
+                    "value": "GET",
+                    "mapTo": "method"
+                  },
+                  {
+                    "type": "literal",
+                    "value": "https://www.googleapis.com/sales/v1/volumes",
+                    "mapTo": "uri"
+                  },
+                  {
+                    "type": "object",
+                    "value": {
+                      "q": "{{$flow.symbol}}"
+                    },
+                    "mapTo": "queryParams"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "actreturn_4",
+            "name": "Return",
+            "description": "Simple Return Activity",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/actreturn",
+              "input": {
+                "mappings": [
+                  {
+                    "mapTo": "code",
+                    "type": "literal",
+                    "value": 200
+                  },
+                  {
+                    "mapTo": "message",
+                    "type": "object",
+                    "value": {
+                      "title": "{{$activity[rest_3].result.items[0].volumeInfo.title}}",
+                      "publishedDate": "{{$activity[rest_3].result.items[0].volumeInfo.publishedDate}}",
+                      "description": "{{$activity[rest_3].result.items[0].volumeInfo.description}}"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "links": [
+          {
+            "from": "log_2",
+            "to": "rest_3"
+          },
+          {
+            "from": "rest_3",
+            "to": "actreturn_4"
+          }
+        ]
+      }
+    },
+    // =================================================
+    {
+      "id": "flow:get_rep",
+      "data": {
+        "name": "Getrep",
+        "metadata": {
+          "input": [
+            {
+              "name": "repnum",
+              "type": "string"
+            }
+          ],
+          "output": [
+            {
+              "name": "code",
+              "type": "integer"
+            },
+            {
+              "name": "message",
+              "type": "any"
+            }
+          ]
+        },
+        "tasks": [
+          {
+            "id": "log_5",
+            "name": "Log Message",
+            "description": "Simple Log Activity",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/log",
+              "input": {
+                "message": "",
+                "flowInfo": "false",
+                "addToFlow": "false"
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "expression",
+                    "value": "string.concat(\"Getting sales data for \", $flow.repnum)",
+                    "mapTo": "message"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "rest_5",
+            "name": "Invoke REST Service",
+            "description": "Simple REST Activity",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/rest",
+              "input": {
+                "method": "",
+                "uri": "",
+                "proxy": "",
+                "pathParams": null,
+                "queryParams": null,
+                "header": null,
+                "skipSsl": "false",
+                "content": null
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "literal",
+                    "value": "GET",
+                    "mapTo": "method"
+                  },
+                  {
+                    "type": "literal",
+                    "value": "https://my.api.mockaroo.com/stock1/1",
+                    "mapTo": "uri"
+                  },
+                  {
+                    "type": "object",
+                    "value": {
+                      "key": "14446930"
+                    },
+                    "mapTo": "queryParams"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "actreturn_5",
+            "name": "Return",
+            "description": "Simple Return Activity",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/actreturn",
+              "input": {
+                "mappings": [
+                  {
+                    "mapTo": "code",
+                    "type": "literal",
+                    "value": 200
+                  },
+                  {
+                    "mapTo": "message",
+                    "type": "object",
+                    "value": {
+                      "title": "{{$activity[rest_3].result.items[0].volumeInfo.title}}",
+                      "publishedDate": "{{$activity[rest_3].result.items[0].volumeInfo.publishedDate}}",
+                      "description": "{{$activity[rest_3].result.items[0].volumeInfo.description}}"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "links": [
+          {
+            "from": "log_2",
+            "to": "rest_3"
+          },
+          {
+            "from": "rest_3",
+            "to": "actreturn_4"
+          },
+          {
+            "from": "log_5",
+            "to": "rest_5"
+          },
+          {
+            "from": "rest_5",
+            "to": "actreturn_5"
+          }
+        ]
+      }
+    }
+  ]
+}
