@@ -168,7 +168,7 @@
                 ],"output":[
                   {
                     "name": "result",
-                    "type": "any"
+                    "type": "object"
                   }
                 ]
               }
@@ -186,16 +186,16 @@
               "mappings": {
                 "input": [
                   {
-                    "type": "any",
+                    "type": "object",
                     "value": "{{$activity[rest_3].result}}",
                     "mapTo": "input"
                   }
                 ],
                 "output": [
                   {
-                    "type": "any",
+                    "type": "message",
                     "value": "{{$activity[rest_3].result}}",
-                    "mapTo": "input"
+
                   }
                 ]
               }
