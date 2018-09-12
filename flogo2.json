@@ -279,7 +279,7 @@
                   },
                   {
                     "type": "literal",
-                    "value": "https://my.api.mockaroo.com/stock1/1",
+                    "value": "https://my.api.mockaroo.com/stock1/msft",
                     "mapTo": "uri"
                   },
                   {
