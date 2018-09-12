@@ -155,13 +155,13 @@
                   },
                   {
                     "type": "literal",
-                    "value": "https://www.googleapis.com/sales/v1/volumes",
+                    "value": "https://my.api.mockaroo.com/stock1",
                     "mapTo": "uri"
                   },
                   {
                     "type": "object",
                     "value": {
-                      "q": "{{$flow.symbol}}"
+                      "key": "14446930"
                     },
                     "mapTo": "queryParams"
                   }
@@ -186,9 +186,7 @@
                     "mapTo": "message",
                     "type": "object",
                     "value": {
-                      "title": "{{$activity[rest_3].result.items[0].volumeInfo.title}}",
-                      "publishedDate": "{{$activity[rest_3].result.items[0].volumeInfo.publishedDate}}",
-                      "description": "{{$activity[rest_3].result.items[0].volumeInfo.description}}"
+                      "title": "{{$activity[rest_3].result"
                     }
                   }
                 ]
